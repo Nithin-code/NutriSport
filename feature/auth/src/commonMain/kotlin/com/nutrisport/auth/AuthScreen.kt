@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import com.nutrisport.auth.component.GoogleButton
 import com.nutrisport.shared.Alpha
 import com.nutrisport.shared.FontSize
+import com.nutrisport.shared.Surface
 import com.nutrisport.shared.TextPrimary
 import com.nutrisport.shared.TextSecondary
 import com.nutrisport.shared.UbuntuMediumFont
@@ -24,9 +25,7 @@ import com.nutrisport.shared.UbuntuRegularFont
 import rememberMessageBarState
 
 @Composable
-fun AuthScreen(
-
-){
+fun AuthScreen(){
     val messageBarState = rememberMessageBarState()
 
     Scaffold() { paddingValues ->
@@ -35,10 +34,13 @@ fun AuthScreen(
             modifier = Modifier
                 .padding(paddingValues),
             messageBarState = messageBarState,
-            errorMaxLines = 2
+            errorMaxLines = 2,
+            contentBackgroundColor = Surface
         ){
 
-            Box(modifier = Modifier.fillMaxSize()){
+            Box(modifier = Modifier
+                .fillMaxSize()
+                .padding(24.dp)){
 
                 Column(
                     modifier = Modifier.align(alignment = Alignment.Center)
@@ -67,9 +69,8 @@ fun AuthScreen(
                 }
 
                 GoogleButton(
-                    modifier = Modifier.fillMaxWidth().align(alignment = Alignment.BottomStart)
-                        .padding(10.dp),
-                    isLoading = false,
+                    modifier = Modifier.fillMaxWidth().align(alignment = Alignment.BottomStart),
+                    isLoading = true,
                     onCLick = {
 
                     }
