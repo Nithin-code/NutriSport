@@ -9,11 +9,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.mmk.kmpauth.firebase.google.GoogleButtonUiContainerFirebase
+import com.mmk.kmpauth.google.GoogleButtonUiContainer
 import com.nutrisport.auth.component.GoogleButton
 import com.nutrisport.shared.Alpha
 import com.nutrisport.shared.FontSize
@@ -22,11 +28,14 @@ import com.nutrisport.shared.TextPrimary
 import com.nutrisport.shared.TextSecondary
 import com.nutrisport.shared.UbuntuMediumFont
 import com.nutrisport.shared.UbuntuRegularFont
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import rememberMessageBarState
 
 @Composable
 fun AuthScreen(){
+
     val messageBarState = rememberMessageBarState()
+    var loadingState by remember { mutableStateOf(false) }
 
     Scaffold() { paddingValues ->
 
@@ -68,13 +77,28 @@ fun AuthScreen(){
 
                 }
 
-                GoogleButton(
-                    modifier = Modifier.fillMaxWidth().align(alignment = Alignment.BottomStart),
-                    isLoading = true,
-                    onCLick = {
+                GoogleButtonUiContainerFirebase(
+                    modifier = Modifier.fillMaxSize(),
+                    onResult = { result ->
+                        result.onSuccess { user->
+                            messageBarState.addSuccess("Authentication Successful")
+                        }.onFailure { error ->
+                            messageBarState.addError("${error.message}")
+                        }
+                        loadingState = false
+                    },
+                ) {
+                    GoogleButton(
+                        modifier = Modifier.fillMaxWidth().align(alignment = Alignment.BottomStart),
+                        isLoading = loadingState,
+                        onCLick = {
+                            loadingState = true
+                            this@GoogleButtonUiContainerFirebase.onClick()
+                        }
+                    )
 
-                    }
-                )
+                }
+
 
             }
 
@@ -82,4 +106,10 @@ fun AuthScreen(){
 
     }
 
+}
+
+@Preview
+@Composable
+fun Prev(){
+    AuthScreen()
 }
