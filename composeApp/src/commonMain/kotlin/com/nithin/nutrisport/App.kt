@@ -12,7 +12,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.mmk.kmpauth.google.GoogleAuthCredentials
+import com.mmk.kmpauth.google.GoogleAuthProvider
 import com.nutrisport.navigation.SetUpNavGraph
+import com.nutrisport.shared.Constants
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -23,6 +26,21 @@ import nutrisport.composeapp.generated.resources.compose_multiplatform
 @Preview
 fun App() {
     MaterialTheme {
-        SetUpNavGraph()
+
+        var isAppReady by remember { mutableStateOf(false) }
+
+        LaunchedEffect(Unit) {
+            GoogleAuthProvider.create(
+                credentials = GoogleAuthCredentials(serverId = Constants.WEB_CLIENT_ID)
+            )
+            isAppReady = true
+        }
+        AnimatedVisibility(
+            modifier = Modifier,
+            visible = isAppReady
+        ) {
+            SetUpNavGraph()
+        }
+
     }
 }
