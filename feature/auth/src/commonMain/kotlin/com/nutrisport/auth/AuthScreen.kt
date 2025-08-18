@@ -29,13 +29,17 @@ import com.nutrisport.shared.TextSecondary
 import com.nutrisport.shared.UbuntuMediumFont
 import com.nutrisport.shared.UbuntuRegularFont
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.koin.compose.viewmodel.koinViewModel
 import rememberMessageBarState
 
 @Composable
 fun AuthScreen(){
 
+    val viewModel = koinViewModel<AuthViewModel>()
+
     val messageBarState = rememberMessageBarState()
     var loadingState by remember { mutableStateOf(false) }
+
 
     Scaffold() { paddingValues ->
 
@@ -81,7 +85,13 @@ fun AuthScreen(){
                     modifier = Modifier.fillMaxSize(),
                     onResult = { result ->
                         result.onSuccess { user->
-                            messageBarState.addSuccess("Authentication Successful")
+                            viewModel.createCustomer(
+                                user = user,
+                                onSuccess = {messageBarState.addSuccess("Authentication Successful")},
+                                onError = { message->
+                                    messageBarState.addError(message)
+                                }
+                            )
                         }.onFailure { error ->
                             messageBarState.addError("${error.message}")
                         }
