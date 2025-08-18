@@ -9,5 +9,9 @@ import com.nutrisport.auth.component.GoogleButton
 @Composable
 @androidx.compose.ui.tooling.preview.Preview(showBackground = true)
 fun Preview(){
-    AuthScreen()
+    AuthScreen(
+        navigateToHomeScreen = {
+
+        }
+    )
 }

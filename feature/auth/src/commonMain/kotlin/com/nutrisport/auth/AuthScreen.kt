@@ -33,7 +33,9 @@ import org.koin.compose.viewmodel.koinViewModel
 import rememberMessageBarState
 
 @Composable
-fun AuthScreen(){
+fun AuthScreen(
+    navigateToHomeScreen : () -> Unit
+){
 
     val viewModel = koinViewModel<AuthViewModel>()
 
@@ -92,6 +94,7 @@ fun AuthScreen(){
                                     messageBarState.addError(message)
                                 }
                             )
+                            navigateToHomeScreen()
                         }.onFailure { error ->
                             messageBarState.addError("${error.message}")
                         }
@@ -121,5 +124,9 @@ fun AuthScreen(){
 @Preview
 @Composable
 fun Prev(){
-    AuthScreen()
+    AuthScreen(
+        navigateToHomeScreen = {
+
+        }
+    )
 }
