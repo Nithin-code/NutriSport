@@ -1,5 +1,6 @@
 package com.nithin.home
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -62,12 +63,18 @@ fun HomeGraph() {
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                    Text(
-                        text = selectedDestination.value.title,
-                        fontFamily = UbuntuMediumFont(),
-                        fontSize = FontSize.LARGE,
-                        color = TextPrimary
-                    )
+                    AnimatedContent(
+                        targetState = selectedDestination.value
+                    ){ destination ->
+
+                        Text(
+                            text = destination.title,
+                            fontFamily = UbuntuMediumFont(),
+                            fontSize = FontSize.LARGE,
+                            color = TextPrimary
+                        )
+
+                    }
                 },
                 navigationIcon = {
                     Icon(
