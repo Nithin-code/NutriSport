@@ -15,7 +15,7 @@ import androidx.compose.ui.Modifier
 import com.mmk.kmpauth.google.GoogleAuthCredentials
 import com.mmk.kmpauth.google.GoogleAuthProvider
 import com.nithin.data.domain.CustomerRepository
-import com.nutrisport.navigation.Screen
+import com.nutrisport.shared.Screen
 import com.nutrisport.navigation.SetUpNavGraph
 import com.nutrisport.shared.Constants
 import org.jetbrains.compose.resources.painterResource
@@ -27,7 +27,9 @@ import org.koin.compose.koinInject
 
 @Composable
 @Preview
-fun App() {
+fun App(
+    modifier: Modifier = Modifier
+) {
     MaterialTheme {
 
         val customerRepository = koinInject<CustomerRepository>()
@@ -50,11 +52,11 @@ fun App() {
             isAppReady = true
         }
         AnimatedVisibility(
-            modifier = Modifier,
+            modifier = modifier,
             visible = isAppReady
         ) {
             SetUpNavGraph(
-                startDestination = startDestination
+                startDestination = Screen.HomeGraph
             )
         }
 
