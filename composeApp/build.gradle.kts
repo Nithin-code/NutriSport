@@ -35,7 +35,9 @@ kotlin {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
             implementation(libs.splash.screen)
+            implementation(libs.androidx.material3)
             implementation(libs.koin.android)
+            implementation("com.google.android.material:material:1.12.0")
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -46,6 +48,7 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtimeCompose)
+
             implementation(libs.auth.kmp)
             implementation(libs.firebase.app)
             implementation(libs.koin.compose)

@@ -6,6 +6,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.nithin.home.HomeGraph
 import com.nutrisport.auth.AuthScreen
+import com.nutrisport.shared.Screen
 
 @Composable
 fun SetUpNavGraph(
