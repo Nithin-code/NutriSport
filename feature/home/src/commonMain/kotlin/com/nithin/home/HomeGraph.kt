@@ -124,7 +124,7 @@ fun HomeGraph() {
                     },
                     navigationIcon = {
                         Icon(
-                            painter = painterResource(Resources.Icon.Menu),
+                            painter = if (drawerState.isOpened()) painterResource(Resources.Icon.Close) else painterResource(Resources.Icon.Menu),
                             contentDescription = "Menu Icon",
                             tint = IconPrimary,
                             modifier = Modifier.clickable {
@@ -138,8 +138,8 @@ fun HomeGraph() {
         ) { padding ->
             Column(
                 modifier = Modifier
-                    .padding(padding)
                     .fillMaxSize()
+                    .padding(padding)
             ) {
 
                 NavHost(
