@@ -30,7 +30,13 @@ fun SetUpNavGraph(
         }
 
         composable<Screen.HomeGraph> {
-            HomeGraph()
+            HomeGraph(
+                navigateToAuthScreen = {
+                    navController.navigate(Screen.Auth){
+                        popUpTo<Screen.HomeGraph> { inclusive = true }
+                    }
+                }
+            )
         }
     }
 
