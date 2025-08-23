@@ -25,7 +25,8 @@ import com.nutrisport.shared.UbuntuRegularFont
 @Composable
 fun CustomDrawer(
     padding: PaddingValues,
-    onSignOutClicked : () -> Unit
+    onSignOutClicked : () -> Unit,
+    onProfileClicked : () -> Unit
 ) {
 //    var customDrawerPosition = animateFloatAsState(
 //        targetValue = if (customDrawerPosition) 0f else -600f,
@@ -66,7 +67,7 @@ fun CustomDrawer(
                 onClick = {
                     when(item){
                         DrawerItem.PROFILE -> {
-
+                            onProfileClicked.invoke()
                         }
                         DrawerItem.BLOG -> {
 
