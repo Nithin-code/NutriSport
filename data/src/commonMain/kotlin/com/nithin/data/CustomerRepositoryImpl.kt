@@ -2,6 +2,7 @@ package com.nithin.data
 
 import com.nithin.data.domain.CustomerRepository
 import com.nutrisport.shared.domain.Customer
+import com.nutrisport.shared.utils.RequestState
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.auth.FirebaseUser
 import dev.gitlive.firebase.auth.auth
@@ -43,6 +44,15 @@ class CustomerRepositoryImpl : CustomerRepository {
             }
         }catch (t : Exception){
             onError("Unable to create user because : ${t.message}")
+        }
+    }
+
+    override suspend fun signOutUser(): RequestState<Unit> {
+        return try {
+            Firebase.auth.signOut()
+            RequestState.Success(data = Unit)
+        }catch (t : Exception){
+            RequestState.Error("error while signOut : ${t.message}")
         }
     }
 

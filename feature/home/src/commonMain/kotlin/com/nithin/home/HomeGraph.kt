@@ -36,6 +36,7 @@ import com.nithin.home.domain.BottomBarDestination
 import com.nithin.home.domain.DrawerState
 import com.nithin.home.domain.MakeOpposite
 import com.nithin.home.domain.isOpened
+import com.nithin.home.viewmodel.HomeGraphViewModel
 import com.nutrisport.shared.FontSize
 import com.nutrisport.shared.IconPrimary
 import com.nutrisport.shared.Resources
@@ -44,10 +45,13 @@ import com.nutrisport.shared.Surface
 import com.nutrisport.shared.TextPrimary
 import com.nutrisport.shared.UbuntuMediumFont
 import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeGraph() {
+fun HomeGraph(
+    navigateToAuthScreen : () -> Unit
+) {
 
     val navController = rememberNavController()
 
@@ -83,6 +87,8 @@ fun HomeGraph() {
         animationSpec = tween(durationMillis = 600)
     )
 
+    val viewModel = koinViewModel<HomeGraphViewModel>()
+
 
     Box(
         modifier = Modifier
@@ -94,7 +100,17 @@ fun HomeGraph() {
 
         ) { padding->
             CustomDrawer(
-                padding
+                padding,
+                onSignOutClicked = {
+                    viewModel.signOutUser(
+                        onError = { message->
+
+                        },
+                        onSuccess = {
+                            navigateToAuthScreen.invoke()
+                        }
+                    )
+                }
             )
         }
 
