@@ -5,6 +5,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.nithin.home.HomeGraph
+import com.nithin.profile.ProfileScreen
 import com.nutrisport.auth.AuthScreen
 import com.nutrisport.shared.Screen
 
@@ -35,9 +36,21 @@ fun SetUpNavGraph(
                     navController.navigate(Screen.Auth){
                         popUpTo<Screen.HomeGraph> { inclusive = true }
                     }
+                },
+                navigateToProfileScreen = {
+                    navController.navigate(Screen.Profile)
                 }
             )
         }
+
+        composable<Screen.Profile> {
+
+            ProfileScreen(
+
+            )
+
+        }
+
     }
 
 }

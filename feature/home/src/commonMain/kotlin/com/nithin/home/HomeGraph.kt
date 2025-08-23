@@ -50,7 +50,8 @@ import org.koin.compose.viewmodel.koinViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeGraph(
-    navigateToAuthScreen : () -> Unit
+    navigateToAuthScreen : () -> Unit,
+    navigateToProfileScreen : () -> Unit
 ) {
 
     val navController = rememberNavController()
@@ -110,7 +111,8 @@ fun HomeGraph(
                             navigateToAuthScreen.invoke()
                         }
                     )
-                }
+                },
+                onProfileClicked = navigateToProfileScreen
             )
         }
 
@@ -145,7 +147,6 @@ fun HomeGraph(
                             tint = IconPrimary,
                             modifier = Modifier.clickable {
                                 drawerState = drawerState.MakeOpposite()
-                                println(drawerState.name)
                             }
                         )
                     }
