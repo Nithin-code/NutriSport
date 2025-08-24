@@ -5,6 +5,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -12,12 +13,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.nutrisport.shared.Alpha
 import com.nutrisport.shared.BorderError
 import com.nutrisport.shared.BorderIdle
 import com.nutrisport.shared.FontSize
+import com.nutrisport.shared.IconSecondary
 import com.nutrisport.shared.SurfaceDarker
 import com.nutrisport.shared.SurfaceLighter
 import com.nutrisport.shared.TextPrimary
@@ -54,7 +57,6 @@ fun CustomTextField(
         placeholder = if (placeholder !=null) {
             {
                 Text(
-                    modifier = Modifier.alpha(Alpha.DISABLED),
                     text = placeholder,
                     fontSize = FontSize.REGULAR
                 )
@@ -64,6 +66,10 @@ fun CustomTextField(
         keyboardOptions = keyboardOption,
         shape = RoundedCornerShape(6.dp),
         colors = TextFieldDefaults.colors(
+            cursorColor = IconSecondary,
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
+            errorIndicatorColor = Color.Transparent,
             focusedContainerColor = SurfaceLighter,
             unfocusedContainerColor = SurfaceLighter,
             disabledContainerColor = SurfaceDarker,
@@ -73,6 +79,10 @@ fun CustomTextField(
             focusedPlaceholderColor = TextPrimary.copy(alpha = Alpha.HALF),
             unfocusedPlaceholderColor = TextPrimary.copy(alpha = Alpha.HALF),
             disabledPlaceholderColor = TextPrimary.copy(alpha = Alpha.DISABLED),
+            selectionColors = TextSelectionColors(
+                handleColor = IconSecondary,
+                backgroundColor = Color.Unspecified
+            )
         )
     )
 

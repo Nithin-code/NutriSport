@@ -7,16 +7,25 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.nutrisport.shared.Resources
 import com.nutrisport.shared.Surface
 import com.nutrisport.shared.components.CustomButton
 import com.nutrisport.shared.components.ProfileForm
+import com.nutrisport.shared.domain.Country
 
 @Composable
 fun ProfileScreen(
 
 ){
+
+    var country by remember {
+        mutableStateOf(Country.INDIA)
+    }
 
     Box(
         modifier = Modifier
@@ -38,6 +47,10 @@ fun ProfileScreen(
             onAddressChanged = {},
             phoneNumber = "",
             onPhoneNumberChanged = {},
+            country = country,
+            onCountrySelect = { it->
+                country = it
+            }
         )
     }
 
