@@ -4,6 +4,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.nithin.data.CustomerRepositoryImpl
 import com.nithin.data.domain.CustomerRepository
 import com.nithin.home.viewmodel.HomeGraphViewModel
+import com.nithin.profile.ProfileViewModel
 import com.nutrisport.auth.AuthViewModel
 import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
@@ -14,6 +15,7 @@ val sharedModule = module {
     single<CustomerRepository> { CustomerRepositoryImpl() }
     viewModelOf(::AuthViewModel)
     viewModelOf(::HomeGraphViewModel)
+    viewModelOf(::ProfileViewModel)
 }
 
 fun initializeKoin(

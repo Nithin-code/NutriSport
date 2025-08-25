@@ -1,5 +1,7 @@
 package com.nutrisport.shared.utils
 
+import androidx.compose.runtime.Composable
+
 sealed class RequestState<out T> {
 
     data object Idle : RequestState<Nothing>()

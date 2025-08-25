@@ -31,7 +31,7 @@ fun ProfileForm(
     lastName : String,
     onLastNameChanged : (String) -> Unit,
     email : String,
-    city : String,
+    city : String?,
     onCityChanged : (String) -> Unit,
     postalCode : Int?,
     onPostalCodeChanged : (Int?) -> Unit,
@@ -65,7 +65,6 @@ fun ProfileForm(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(horizontal = 24.dp, vertical = 12.dp)
             .verticalScroll(state = rememberScrollState())
             .imePadding(), // due to this content of our textfield will not be overlapped by keyboard,
         verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -94,10 +93,10 @@ fun ProfileForm(
         )
 
         CustomTextField(
-            value = city,
+            value = city ?: "",
             onValueChanged = {onCityChanged.invoke(it)},
             placeholder = "City",
-            error = city.length !in 3..50,
+            error = city?.length !in 3..50,
         )
 
         CustomTextField(
