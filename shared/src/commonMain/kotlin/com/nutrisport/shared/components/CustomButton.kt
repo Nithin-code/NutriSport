@@ -51,7 +51,8 @@ fun CustomButton(
             .height(height),
         onClick = onClick,
         shape = RoundedCornerShape(6.dp),
-        color = color.value
+        color = color.value,
+        enabled = enabled
     ){
 
         Row(

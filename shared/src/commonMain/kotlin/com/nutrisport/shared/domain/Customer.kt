@@ -17,6 +17,6 @@ data class Customer(
 
 @Serializable
 data class PhoneNumber(
-    val dailCode : String,
+    val dailCode : Int,
     val number : String
 )

@@ -46,7 +46,9 @@ fun SetUpNavGraph(
         composable<Screen.Profile> {
 
             ProfileScreen(
-
+                navigateBack = {
+                    navController.navigateUp()
+                }
             )
 
         }
