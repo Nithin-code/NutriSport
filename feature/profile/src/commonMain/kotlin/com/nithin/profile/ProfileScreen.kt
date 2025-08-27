@@ -1,5 +1,6 @@
 package com.nithin.profile
 
+import ContentWithMessageBar
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -15,6 +16,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -28,26 +30,29 @@ import com.nutrisport.shared.Surface
 import com.nutrisport.shared.TextPrimary
 import com.nutrisport.shared.UbuntuMediumFont
 import com.nutrisport.shared.components.CustomButton
+import com.nutrisport.shared.components.ErrorCard
+import com.nutrisport.shared.components.InfoCard
+import com.nutrisport.shared.components.LoadingCard
 import com.nutrisport.shared.components.ProfileForm
 import com.nutrisport.shared.domain.Country
 import com.nutrisport.shared.utils.DisplayResult
 import com.nutrisport.shared.utils.RequestState
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
+import rememberMessageBarState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
     navigateBack : () -> Unit
 ){
-
     val viewModel = koinViewModel<ProfileViewModel>()
-
     val screenState = viewModel.screenState
+    val screenReady= viewModel.isScreenReady
+    val isFormValid = viewModel.isFormValid()
 
-    var country by remember {
-        mutableStateOf(Country.INDIA)
-    }
+    val messageBarState = rememberMessageBarState()
+
 
     Scaffold(
         containerColor = Surface,
@@ -76,56 +81,93 @@ fun ProfileScreen(
             )
         }
     ) { padding->
-        Column(
-            modifier = Modifier
-                .padding(top = padding.calculateTopPadding(), bottom = padding.calculateBottomPadding())
-                .padding(horizontal = 24.dp, vertical = 12.dp)
-        ) {
+        ContentWithMessageBar(
+            modifier = Modifier.padding(top = padding.calculateTopPadding(), bottom = padding.calculateBottomPadding()),
+            contentBackgroundColor = Surface,
+            messageBarState = messageBarState,
+            errorMaxLines = 2
+        ){
+
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+
+                    .padding(horizontal = 24.dp, vertical = 12.dp)
+            ) {
 
 
-            screenState.DisplayResult(
-                onLoading = {
+                screenReady.DisplayResult(
+                    onLoading = {
+                        LoadingCard(modifier = Modifier.fillMaxSize())
+                    },
+                    onSuccess = { state ->
+                        Column(
+                            modifier = Modifier.fillMaxSize()
+                        ) {
+                            ProfileForm(
+                                modifier = Modifier.weight(1f),
+                                firstName = screenState.firstName,
+                                onFirstNameChanged = {
+                                    viewModel.updateItem(ProfileScreenEvent.UpdateFirstName(value = it))
+                                },
+                                lastName = screenState.lastName,
+                                onLastNameChanged = {
+                                    viewModel.updateItem(ProfileScreenEvent.UpdateLastName(value = it))
+                                },
+                                email = screenState.email,
+                                city = screenState.city,
+                                onCityChanged = {
+                                    viewModel.updateItem(ProfileScreenEvent.UpdateCity(value = it))
+                                },
+                                postalCode = screenState.postalCode,
+                                onPostalCodeChanged = {
+                                    viewModel.updateItem(ProfileScreenEvent.UpdatePostalCode(value = it?:""))
+                                },
+                                address = screenState.address ?: "",
+                                onAddressChanged = { viewModel.updateItem(ProfileScreenEvent.UpdateAddress(value = it))},
+                                phoneNumber = screenState.mobileNo?.number,
+                                onPhoneNumberChanged = { viewModel.updateItem(ProfileScreenEvent.UpdateMobileNo(value = it))},
+                                country = screenState.country,
+                                onCountrySelect = { it ->
 
-                },
-                onSuccess = {state->
-                    ProfileForm(
-                        modifier = Modifier.weight(1f),
-                        firstName = state.firstName,
-                        onFirstNameChanged = {},
-                        lastName = state.lastName,
-                        onLastNameChanged = {},
-                        email = state.email,
-                        city = state.city,
-                        onCityChanged = {},
-                        postalCode = ,
-                        onPostalCodeChanged = {},
-                        address = "",
-                        onAddressChanged = {},
-                        phoneNumber = "",
-                        onPhoneNumberChanged = {},
-                        country = state.country,
-                        onCountrySelect = { it->
-                            country = it
+                                }
+                            )
+
+                            CustomButton(
+                                modifier = Modifier,
+                                text = "Update",
+                                icon = Resources.Icon.Checkmark,
+                                enabled = isFormValid,
+                                onClick = {
+                                    viewModel.updateItem(
+                                        ProfileScreenEvent.UpdateBtnClick(
+                                            onError = {message->
+                                                messageBarState.addError(message)
+                                            },
+                                            onSuccess = {
+                                                messageBarState.addSuccess("Successfully Updated..")
+                                            }
+                                        )
+                                    )
+                                }
+                            )
+
                         }
-                    )
-                },
-                onError = {
+                    },
+                    onError = { message ->
+                        InfoCard(
+                            modifier = Modifier,
+                            image = Resources.Image.Cat,
+                            title = "Oops!",
+                            subTitle = message
+                        )
+                    },
+                    onIdle = {},
+                    backgroundColor = Surface
+                )
 
-                },
-                onIdle = {
+            }
 
-                }
-            )
-
-
-
-
-            CustomButton(
-                modifier = Modifier,
-                text = "Update",
-                icon = Resources.Icon.Checkmark,
-                onClick = navigateBack
-            )
         }
     }
 

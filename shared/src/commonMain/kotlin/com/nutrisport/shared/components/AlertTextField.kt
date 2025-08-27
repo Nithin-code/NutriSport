@@ -43,7 +43,7 @@ fun AlertTextField(
                 onClick.invoke()
             }
             .padding(
-                vertical = 20.dp,
+                vertical = 16.dp,
                 horizontal = 16.dp
             ),
         verticalAlignment = Alignment.CenterVertically

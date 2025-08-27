@@ -8,12 +8,13 @@ import dev.gitlive.firebase.auth.FirebaseUser
 import dev.gitlive.firebase.auth.auth
 import dev.gitlive.firebase.firestore.firestore
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flow
 
 class CustomerRepositoryImpl : CustomerRepository {
 
-    override fun getUserId() : String? {
+    override fun getUserId(): String? {
         return Firebase.auth.currentUser?.uid
     }
 
@@ -23,7 +24,7 @@ class CustomerRepositoryImpl : CustomerRepository {
         onError: (String) -> Unit
     ) {
         try {
-            if (user != null){
+            if (user != null) {
                 val customerCollection = Firebase.firestore.collection(collectionPath = "customer")
                 val customer = Customer(
                     id = user.uid.toString(),
@@ -32,9 +33,9 @@ class CustomerRepositoryImpl : CustomerRepository {
                     email = user.email ?: "Unknown"
                 )
                 val customerExist = customerCollection.document(user.uid).get().exists
-                if (customerExist){
+                if (customerExist) {
                     onSuccess()
-                }else{
+                } else {
                     customerCollection.document(
                         user.uid
                     ).set(
@@ -42,24 +43,24 @@ class CustomerRepositoryImpl : CustomerRepository {
                     )
                     onSuccess()
                 }
-            }else{
+            } else {
                 onError("Invalid User")
             }
-        }catch (t : Exception){
+        } catch (t: Exception) {
             onError("Unable to create user because : ${t.message}")
         }
     }
 
-    override fun readCustomerFlow(): Flow<RequestState<Customer>> = flow {
+    override fun readCustomerFlow(): Flow<RequestState<Customer>> = channelFlow {
         try {
             val userID = getUserId()
-            if (userID!=null){
+            if (userID != null) {
                 val database = Firebase.firestore
                 database.collection(collectionPath = "customer")
                     .document(userID)
                     .snapshots
-                    .collectLatest { document->
-                        if (document.exists){
+                    .collectLatest { document ->
+                        if (document.exists) {
                             val customer = Customer(
                                 id = document.id,
                                 firstName = document.get(field = "firstName"),
@@ -70,16 +71,16 @@ class CustomerRepositoryImpl : CustomerRepository {
                                 city = document.get(field = "city"),
                                 mobileNo = document.get(field = "mobileNo"),
                             )
-                            emit(RequestState.Success(data = customer))
-                        }else{
-                            emit(RequestState.Error("Queried customer document does not exists."))
+                            send(RequestState.Success(data = customer))
+                        } else {
+                            send(RequestState.Error("Queried customer document does not exists."))
                         }
                     }
-            }else{
-                emit(RequestState.Error("User not found.."))
+            } else {
+                send(RequestState.Error("User not found.."))
             }
-        }catch (t : Exception){
-            emit(RequestState.Error("Error while reading customer info : ${t.message}"))
+        } catch (t: Exception) {
+            send(RequestState.Error("Error while reading customer info : ${t.message}"))
         }
     }
 
@@ -87,8 +88,44 @@ class CustomerRepositoryImpl : CustomerRepository {
         return try {
             Firebase.auth.signOut()
             RequestState.Success(data = Unit)
-        }catch (t : Exception){
+        } catch (t: Exception) {
             RequestState.Error("error while signOut : ${t.message}")
+        }
+    }
+
+    override suspend fun updateCustomer(
+        customer: Customer,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) {
+        try {
+            val userId = getUserId()
+            if (userId != null) {
+                val database = Firebase.firestore
+                val customerCollection = database.collection(collectionPath = "customer")
+                val existingCustomer = customerCollection
+                    .document(customer.id)
+                    .get()
+                if (existingCustomer.exists) {
+                    customerCollection.document(customer.id)
+                        .update(
+                            "firstName" to customer.firstName,
+                            "lastName" to customer.lastName,
+                            "city" to customer.city,
+                            "postalCode" to customer.postalCode,
+                            "address" to customer.address,
+                            "mobileNo" to customer.mobileNo
+                        )
+                    onSuccess.invoke()
+                } else {
+                    onError("Error while getting customer details")
+                }
+            } else {
+                onError("Error while getting customer details")
+            }
+
+        } catch (t: Exception) {
+            onError("Error while updating information ${t.message}")
         }
     }
 

@@ -19,4 +19,8 @@ interface CustomerRepository {
 
     suspend fun signOutUser() : RequestState<Unit>
 
+    suspend fun updateCustomer(
+        customer: Customer, onSuccess: () -> Unit, onError: (String) -> Unit
+    )
+
 }
