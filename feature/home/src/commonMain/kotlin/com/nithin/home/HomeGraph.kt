@@ -51,7 +51,8 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun HomeGraph(
     navigateToAuthScreen : () -> Unit,
-    navigateToProfileScreen : () -> Unit
+    navigateToProfileScreen : () -> Unit,
+    navigateToAdminPanel : () -> Unit
 ) {
 
     val navController = rememberNavController()
@@ -112,7 +113,10 @@ fun HomeGraph(
                         }
                     )
                 },
-                onProfileClicked = navigateToProfileScreen
+                onProfileClicked = navigateToProfileScreen,
+                onAdminPanelClicked = {
+                    navigateToAdminPanel.invoke()
+                }
             )
         }
 

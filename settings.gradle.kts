@@ -27,9 +27,11 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
+include(":admin")
 include(":data")
 include(":di")
 include(":di")
+include(":feature:admin")
 include(":feature:home")
 
 include(":feature:profile")
