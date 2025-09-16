@@ -26,7 +26,8 @@ import com.nutrisport.shared.UbuntuRegularFont
 fun CustomDrawer(
     padding: PaddingValues,
     onSignOutClicked : () -> Unit,
-    onProfileClicked : () -> Unit
+    onProfileClicked : () -> Unit,
+    onAdminPanelClicked : () -> Unit
 ) {
 //    var customDrawerPosition = animateFloatAsState(
 //        targetValue = if (customDrawerPosition) 0f else -600f,
@@ -82,7 +83,7 @@ fun CustomDrawer(
                             onSignOutClicked.invoke()
                         }
                         DrawerItem.ADMIN -> {
-
+                            onAdminPanelClicked.invoke()
                         }
                     }
                 }
@@ -95,7 +96,7 @@ fun CustomDrawer(
         CustomDrawerCard(
             item = DrawerItem.ADMIN,
             onClick = {
-
+                onAdminPanelClicked.invoke()
             }
         )
 
